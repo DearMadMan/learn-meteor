@@ -8,14 +8,14 @@ Template.postEdit.events({
 			title: $(e.target).find('[name=title]').val()
 		}
 
-		var errors= validatePost(post);
+		var errors= validatePost(postProperties);
 		if(errors.title || errors.url)
 			return Session.set('postEditErrors',errors);
 
 		Posts.update(currentPostId,{$set: postProperties},function(error){
 			if(error){
 				// 向用户显示错误信息
-				throwError(error.reason);
+				Errors.throw(error.reason);
 			}else{
 				Router.go('postPage',{_id: currentPostId});
 			}
@@ -32,9 +32,9 @@ Template.postEdit.events({
 	}
 });
 
-Template.postEdit.onCreated(function()){
+Template.postEdit.onCreated(function(){
 	Session.set('postEditErrors',{});
-};
+});
 
 Template.postEdit.helpers({
 	errorMessage: function(field){
